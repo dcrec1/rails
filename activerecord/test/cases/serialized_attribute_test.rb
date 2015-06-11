@@ -274,4 +274,15 @@ class SerializedAttributeTest < ActiveRecord::TestCase
 
     assert_equal({}, topic.content)
   end
+
+  def test_persists_an_empty_hash_on_a_not_null_field
+    College.serialize(:name, Hash)
+    college = College.new(name: {})
+
+    assert college.save
+
+    college.name = nil
+    college.save
+    assert_equal college.name, college.reload.name
+  end
 end
